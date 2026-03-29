@@ -1,0 +1,1 @@
+const e={id:"weather.enabled",type:"boolean",name:"Weather System",description:"Enable/disable weather transitions (clouds, aurora)",defaultValue:!1,tweakPath:"Scene.Weather.enabled"};export{e as options};

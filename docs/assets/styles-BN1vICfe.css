@@ -1,0 +1,1191 @@
+/**
+ * Debug Panel Styles
+ * Astro Darkrise theme - clean dark UI with subtle borders.
+ */
+
+:root {
+    /* Background hierarchy (darkest to lightest):
+       --debug-bg-inset < --debug-bg < --debug-bg-section < --debug-bg-lighter */
+    --debug-bg: #191c2d;
+    --debug-bg-hover: #1e2235;
+    --debug-bg-section: #1a1d2e;
+    --debug-bg-lighter: #22263a;
+    --debug-bg-inset: rgba(0, 0, 0, 0.3);
+    --debug-border: rgba(255, 255, 255, 0.08);
+    --debug-border-light: rgba(255, 255, 255, 0.12);
+    --debug-text: #e8eaed;
+    --debug-text-muted: rgba(147, 159, 167, 0.8);
+    --debug-accent: #4a90d9;
+    --debug-accent-hover: #5ba0e9;
+    --debug-success: #4caf50;
+    --debug-warning: #ff9800;
+    --debug-error: #f44336;
+    --debug-font: 'Consolas', 'Monaco', 'Courier New', monospace;
+    --debug-font-size: 12px;
+    --debug-spacing: 8px;
+    --debug-radius: 4px;
+    --debug-panel-width: 280px;
+    --debug-info-panel-width: 260px;
+}
+
+/* Panel positioning is now handled by debug-layout grid */
+
+/* Tweakpane panels (not in grid) still need offset */
+body.debug-info-panel-active .tp-dfwv {
+    right: calc(var(--debug-info-panel-width) + 8px) !important;
+}
+
+body.debug-info-panel-active.debug-info-panel-collapsed .tp-dfwv {
+    right: 44px !important;
+}
+
+/* Offset for right panel flyout in compact mode (54px panel + flyout width + 8px margin) */
+body.debug-info-flyout-open .tp-dfwv {
+    right: calc(54px + var(--debug-info-flyout-width, 240px) + 8px) !important;
+}
+
+/* ─── Tweakpane Darkrise Theme ─── */
+.tp-dfwv {
+    /* Base colors */
+    --tp-base-background-color: var(--debug-bg);
+    --tp-base-shadow-color: rgba(0, 0, 0, 0.3);
+
+    /* Container colors */
+    --tp-container-background-color: var(--debug-bg-section);
+    --tp-container-background-color-active: var(--debug-bg-hover);
+    --tp-container-background-color-focus: var(--debug-bg-hover);
+    --tp-container-background-color-hover: var(--debug-bg-hover);
+    --tp-container-foreground-color: var(--debug-text);
+
+    /* Input colors */
+    --tp-input-background-color: var(--debug-bg-inset);
+    --tp-input-background-color-active: var(--debug-bg-lighter);
+    --tp-input-background-color-focus: var(--debug-bg-lighter);
+    --tp-input-background-color-hover: var(--debug-bg-lighter);
+    --tp-input-foreground-color: var(--debug-text);
+
+    /* Button colors */
+    --tp-button-background-color: var(--debug-bg-section);
+    --tp-button-background-color-active: var(--debug-accent);
+    --tp-button-background-color-focus: var(--debug-bg-hover);
+    --tp-button-background-color-hover: var(--debug-bg-hover);
+    --tp-button-foreground-color: var(--debug-text);
+
+    /* Label colors */
+    --tp-label-foreground-color: var(--debug-text-muted);
+
+    /* Monitor colors */
+    --tp-monitor-background-color: var(--debug-bg-inset);
+    --tp-monitor-foreground-color: var(--debug-text);
+
+    /* Groove (slider track) */
+    --tp-groove-foreground-color: var(--debug-accent);
+
+    /* Scrollbar support for overflow */
+    max-height: calc(100vh - 16px);
+    max-height: calc(100dvh - 16px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Tweakpane scrollbar styling */
+.tp-dfwv::-webkit-scrollbar {
+    width: 6px;
+}
+
+.tp-dfwv::-webkit-scrollbar-track {
+    background: var(--debug-bg);
+}
+
+.tp-dfwv::-webkit-scrollbar-thumb {
+    background: var(--debug-border-light);
+    border-radius: 3px;
+}
+
+.tp-dfwv::-webkit-scrollbar-thumb:hover {
+    background: var(--debug-text-muted);
+}
+
+/* Folder title bar styling */
+.tp-dfwv .tp-rotv_t {
+    background: var(--debug-bg-section);
+    border-bottom: 1px solid var(--debug-border);
+}
+
+/* Folder content area */
+.tp-dfwv .tp-rotv_c {
+    border-left: 1px solid var(--debug-border);
+}
+
+/* Blade (control row) borders */
+.tp-dfwv .tp-lblv {
+    border-bottom: 1px solid var(--debug-border);
+}
+
+/* Graph/monitor styling */
+.tp-dfwv .tp-grlv_g {
+    background: var(--debug-bg-inset);
+    border: 1px solid var(--debug-border);
+}
+
+/* Reduce Tweakpane height when LogsPanel is expanded */
+body.logs-panel-expanded .tp-dfwv {
+    max-height: calc(100vh - 300px - 24px);
+    max-height: calc(100dvh - 300px - 24px);
+}
+
+@media (max-width: 600px) {
+    body.logs-panel-expanded .tp-dfwv {
+        max-height: calc(50vh - 24px);
+        max-height: calc(50dvh - 24px);
+    }
+}
+
+/* Account for logs panel header when collapsed */
+body.logs-panel-active perfs-detail-dialog {
+    bottom: 32px;
+}
+
+/* Account for logs panel when expanded */
+body.logs-panel-expanded perfs-detail-dialog {
+    bottom: 300px;
+}
+
+@media (max-width: 600px) {
+    body.logs-panel-expanded perfs-detail-dialog {
+        bottom: 50dvh;
+    }
+}
+
+/* Container - Left (Tools) Panel */
+.debug-panel-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 10000;
+    pointer-events: none;
+    font-family: var(--debug-font);
+    font-size: var(--debug-font-size);
+    color: var(--debug-text);
+}
+
+/* Container - Right (Info) Panel */
+.debug-info-panel-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    pointer-events: none;
+    font-family: var(--debug-font);
+    font-size: var(--debug-font-size);
+    color: var(--debug-text);
+}
+
+/* Main Panel */
+.debug-panel {
+    position: relative;
+    height: 100%;
+    background: var(--debug-bg);
+    border-right: 1px solid var(--debug-border);
+    display: flex;
+    flex-direction: column;
+    pointer-events: auto;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    transition: width 0.2s ease;
+}
+
+.debug-panel.collapsed {
+    width: 32px !important;
+}
+
+.debug-panel.collapsed .debug-sections-container,
+.debug-panel.collapsed .debug-panel-title,
+.debug-panel.collapsed .debug-resize-handle {
+    display: none;
+}
+
+/* Right-side (Info) Panel specific styles */
+.debug-info-panel {
+    border-right: none;
+    border-left: 1px solid var(--debug-border);
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.debug-info-panel .debug-panel-header {
+    flex-direction: row-reverse;
+}
+
+/* Resize handle on left side for info panel */
+.debug-resize-handle-left {
+    left: 0;
+    right: auto;
+}
+
+/* Panel Header */
+.debug-panel-header {
+    display: flex;
+    align-items: center;
+    padding: var(--debug-spacing);
+    background: var(--debug-bg-section);
+    border-bottom: 1px solid var(--debug-border);
+    gap: var(--debug-spacing);
+}
+
+.debug-collapse-btn {
+    margin: 0;
+    background: none;
+    border: none;
+    color: var(--debug-text);
+    cursor: pointer;
+    padding: 4px;
+    font-size: 10px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.debug-collapse-btn:hover {
+    opacity: 1;
+}
+
+.debug-panel-title {
+    font-weight: bold;
+    font-size: 13px;
+}
+
+/* Sections Container */
+.debug-sections-container {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Scrollbar styling */
+.debug-sections-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.debug-sections-container::-webkit-scrollbar-track {
+    background: var(--debug-bg);
+}
+
+.debug-sections-container::-webkit-scrollbar-thumb {
+    background: var(--debug-border-light);
+    border-radius: 3px;
+}
+
+.debug-sections-container::-webkit-scrollbar-thumb:hover {
+    background: var(--debug-text-muted);
+}
+
+/* Resize Handle */
+.debug-resize-handle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 4px;
+    cursor: ew-resize;
+    background: transparent;
+    transition: background 0.2s;
+}
+
+.debug-resize-handle:hover {
+    background: var(--debug-accent);
+}
+
+/* Section */
+.debug-section {
+    border-bottom: 1px solid var(--debug-border);
+}
+
+.debug-section-header {
+    display: flex;
+    align-items: center;
+    padding: var(--debug-spacing) calc(var(--debug-spacing) + 2px);
+    background: var(--debug-bg-section);
+    cursor: pointer;
+    user-select: none;
+    gap: 6px;
+    transition: background 0.2s;
+}
+
+.debug-section-header:hover {
+    background: var(--debug-bg-hover);
+}
+
+.debug-section-icon {
+    font-size: 8px;
+    opacity: 0.7;
+    width: 10px;
+    text-align: center;
+}
+
+.debug-section-title {
+    font-weight: 500;
+    font-size: 11px;
+}
+
+.debug-section-content {
+    padding: var(--debug-spacing);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.debug-section.collapsed .debug-section-content {
+    display: none;
+}
+
+/* Info Row */
+.debug-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--debug-spacing);
+}
+
+.debug-info-label {
+    color: var(--debug-text-muted);
+    font-size: 11px;
+}
+
+.debug-info-value {
+    font-family: var(--debug-font);
+    color: var(--debug-text);
+    font-size: 11px;
+    text-align: right;
+    word-break: break-all;
+}
+
+/* Checkbox Row */
+.debug-checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.debug-checkbox-row input[type="checkbox"] {
+    margin: 0;
+    cursor: pointer;
+    accent-color: var(--debug-accent);
+}
+
+.debug-checkbox-row label {
+    cursor: pointer;
+    font-size: 11px;
+}
+
+/* Button */
+.debug-button {
+    margin: 0;
+    background: var(--debug-bg-inset);
+    border: 1px solid var(--debug-border);
+    color: var(--debug-text);
+    padding: 6px 10px;
+    border-radius: var(--debug-radius);
+    cursor: pointer;
+    font-family: var(--debug-font);
+    font-size: 11px;
+    transition: all 0.2s;
+}
+
+.debug-button:hover {
+    border-color: var(--debug-accent);
+}
+
+.debug-button:active {
+    background: var(--debug-accent);
+}
+
+/* Button Group */
+.debug-button-group {
+    display: flex;
+    gap: 2px;
+}
+
+.debug-button-group-item {
+    flex: 1;
+    margin: 0;
+    background: var(--debug-bg-section);
+    border: 1px solid var(--debug-border);
+    color: var(--debug-text);
+    padding: 6px 8px;
+    cursor: pointer;
+    font-family: var(--debug-font);
+    font-size: 11px;
+    transition: all 0.2s;
+}
+
+.debug-button-group-item:first-child {
+    border-radius: var(--debug-radius) 0 0 var(--debug-radius);
+}
+
+.debug-button-group-item:last-child {
+    border-radius: 0 var(--debug-radius) var(--debug-radius) 0;
+}
+
+.debug-button-group-item:hover {
+    background: var(--debug-bg-hover);
+}
+
+.debug-button-group-item.active {
+    background: var(--debug-accent);
+    border-color: var(--debug-accent);
+}
+
+/* Select */
+.debug-select-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--debug-spacing);
+}
+
+.debug-select-row label {
+    font-size: 11px;
+    color: var(--debug-text-muted);
+}
+
+.debug-select {
+    background: var(--debug-bg-inset);
+    border: 1px solid var(--debug-border);
+    color: var(--debug-text);
+    padding: 4px 8px;
+    border-radius: var(--debug-radius);
+    font-family: var(--debug-font);
+    font-size: 11px;
+    cursor: pointer;
+    min-width: 80px;
+}
+
+.debug-select:focus {
+    outline: none;
+    border-color: var(--debug-accent);
+}
+
+.debug-select option {
+    background: var(--debug-bg);
+    color: var(--debug-text);
+}
+
+.debug-select option:disabled {
+    color: var(--debug-text-muted);
+    font-style: italic;
+}
+
+/* Separator */
+.debug-separator {
+    height: 1px;
+    background: var(--debug-border);
+    margin: 4px 0;
+}
+
+/* Input */
+.debug-input,
+.debug-info-row input[type="number"] {
+    background: var(--debug-bg-inset);
+    border: 1px solid var(--debug-border);
+    color: var(--debug-text);
+    padding: 4px 6px;
+    border-radius: var(--debug-radius);
+    font-family: var(--debug-font);
+    font-size: 11px;
+    width: 60px;
+}
+
+.debug-input:focus,
+.debug-info-row input[type="number"]:focus {
+    outline: none;
+    border-color: var(--debug-accent);
+}
+
+/* Color inputs */
+.debug-info-row input[type="color"] {
+    width: 32px;
+    height: 22px;
+    padding: 0;
+    border: 1px solid var(--debug-border);
+    border-radius: var(--debug-radius);
+    cursor: pointer;
+    background: var(--debug-bg-inset);
+}
+
+.debug-info-row input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 2px;
+}
+
+.debug-info-row input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: 2px;
+}
+
+/* Remove spinner buttons from number inputs */
+.debug-input[type="number"]::-webkit-inner-spin-button,
+.debug-input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.debug-input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* Slider */
+.debug-slider-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--debug-spacing);
+}
+
+.debug-slider-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    max-width: 120px;
+}
+
+.debug-slider {
+    flex: 1;
+    height: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--debug-border);
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.debug-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: var(--debug-accent);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.debug-slider::-webkit-slider-thumb:hover {
+    background: var(--debug-accent-hover);
+}
+
+.debug-slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: var(--debug-accent);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.debug-slider-value {
+    font-size: 10px;
+    color: var(--debug-text-muted);
+    min-width: 32px;
+    text-align: right;
+}
+
+/* Audio Sources (compact) */
+.debug-audio-sources {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.debug-audio-source {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 0;
+}
+
+.debug-audio-status {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--debug-text-muted);
+    flex-shrink: 0;
+}
+
+.debug-audio-status.playing {
+    background: var(--debug-success);
+    box-shadow: 0 0 4px var(--debug-success);
+}
+
+.debug-audio-status.looping {
+    background: var(--debug-accent);
+    box-shadow: 0 0 4px var(--debug-accent);
+}
+
+.debug-audio-name {
+    font-size: 11px;
+    color: var(--debug-text);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-transform: none;
+}
+
+.debug-audio-name.playing {
+    color: var(--debug-success);
+}
+
+.debug-audio-source.positional .debug-audio-name:hover {
+    color: var(--debug-accent);
+}
+
+.debug-audio-type {
+    font-size: 8px;
+    color: var(--debug-text-muted);
+    padding: 1px 4px;
+    background: var(--debug-bg-section);
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.debug-audio-slider {
+    width: 50px;
+    height: 3px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--debug-border);
+    border-radius: 2px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.debug-audio-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    background: var(--debug-accent);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.debug-audio-slider::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    background: var(--debug-accent);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.debug-audio-volume-value {
+    font-size: 9px;
+    color: var(--debug-text-muted);
+    min-width: 24px;
+    text-align: right;
+}
+
+.debug-audio-position {
+    padding-left: 12px;
+    margin-top: -2px;
+    margin-bottom: 4px;
+}
+
+.debug-audio-pos-value {
+    font-size: 9px;
+    color: var(--debug-text-muted);
+}
+
+/* Utility classes */
+.debug-text-muted {
+    color: var(--debug-text-muted);
+}
+
+.debug-text-accent {
+    color: var(--debug-accent);
+}
+
+.debug-text-success {
+    color: var(--debug-success);
+}
+
+.debug-text-warning {
+    color: var(--debug-warning);
+}
+
+.debug-text-error {
+    color: var(--debug-error);
+}
+
+/* Hierarchy Tree */
+.debug-hierarchy-tree {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-size: 11px;
+}
+
+.debug-hierarchy-node {
+    user-select: none;
+}
+
+.debug-hierarchy-row {
+    display: flex;
+    align-items: center;
+    padding: 2px 4px;
+    cursor: pointer;
+    border-radius: 2px;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+.debug-hierarchy-row:hover {
+    background: var(--debug-bg-hover);
+}
+
+.debug-hierarchy-row.selected {
+    background: var(--debug-accent);
+    color: white;
+}
+
+.debug-hierarchy-toggle {
+    width: 12px;
+    font-size: 8px;
+    text-align: center;
+    cursor: pointer;
+    opacity: 0.7;
+    flex-shrink: 0;
+}
+
+.debug-hierarchy-toggle:hover {
+    opacity: 1;
+}
+
+.debug-hierarchy-icon {
+    font-size: 10px;
+    opacity: 0.8;
+    flex-shrink: 0;
+}
+
+.debug-hierarchy-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: none;
+}
+
+.debug-hierarchy-children {
+    /* Children indentation handled by padding */
+}
+
+.debug-hierarchy-search {
+    font-size: 11px;
+}
+
+.debug-hierarchy-row.search-match {
+    background: rgba(255, 200, 0, 0.15);
+}
+
+.debug-search-highlight {
+    background: rgba(255, 200, 0, 0.4);
+    color: inherit;
+    padding: 0 1px;
+    border-radius: 2px;
+}
+
+/* Button Row */
+.debug-button-row {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+/* Component List */
+.debug-component-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.debug-component-list-info {
+    font-size: 10px;
+    margin-bottom: 8px;
+}
+
+.debug-component-list-empty {
+    font-size: 10px;
+}
+
+.debug-category-header {
+    font-size: 10px;
+    font-weight: bold;
+    margin-top: 8px;
+    margin-bottom: 4px;
+    color: var(--debug-text-muted);
+}
+
+.debug-component-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--debug-spacing);
+    margin-bottom: 4px;
+}
+
+.debug-component-name {
+    font-size: 11px;
+}
+
+.debug-component-name.active {
+    color: var(--debug-accent);
+}
+
+.debug-button-small {
+    margin: 0;
+    background: var(--debug-bg-inset);
+    border: 1px solid var(--debug-border);
+    color: var(--debug-text);
+    padding: 2px 8px;
+    border-radius: var(--debug-radius);
+    cursor: pointer;
+    font-family: var(--debug-font);
+    font-size: 10px;
+    transition: all 0.2s;
+}
+
+.debug-button-small:hover {
+    border-color: var(--debug-accent);
+}
+
+.debug-button-small:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Subsections (foldable within a section) */
+.debug-subsection {
+    margin-bottom: 8px;
+}
+
+.debug-subsection-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0;
+    cursor: pointer;
+    font-size: 11px;
+    color: var(--debug-text-muted);
+    user-select: none;
+}
+
+.debug-subsection-header:hover {
+    color: var(--debug-text);
+}
+
+.debug-subsection-arrow {
+    font-size: 8px;
+    transition: transform 0.15s ease;
+    display: inline-block;
+    width: 10px;
+}
+
+.debug-subsection:not(.collapsed) .debug-subsection-arrow {
+    transform: rotate(90deg);
+}
+
+.debug-subsection-content {
+    padding-left: 16px;
+}
+
+.debug-subsection.collapsed .debug-subsection-content {
+    display: none;
+}
+
+/* Orientation Gizmo */
+.debug-orientation-gizmo {
+    transition: bottom 0.15s ease, right 0.15s ease;
+}
+
+/* Tool hint text */
+.debug-tool-hint {
+    font-size: 10px;
+    opacity: 0.6;
+}
+
+.debug-tool-hint div {
+    margin-bottom: 2px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Visualizer Tool - shared patterns from Resources Inspector
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Foldable subsection panels */
+.debug-viz-subsection {
+    margin-bottom: 8px;
+    border: 1px solid var(--debug-border, #3c3c3c);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.debug-viz-subsection-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    background: var(--debug-bg-inset);
+    user-select: none;
+    font-size: 11px;
+}
+
+.debug-viz-subsection-icon {
+    font-size: 8px;
+    width: 10px;
+    cursor: pointer;
+    color: var(--debug-text-muted, #888);
+}
+
+.debug-viz-subsection-title {
+    flex: 1;
+    cursor: pointer;
+}
+
+.debug-viz-subsection-content {
+    padding: 8px;
+}
+
+/* Stats container (like Resources stats) */
+.debug-viz-stats {
+    padding: 6px 8px;
+    background: var(--debug-bg-inset);
+    border-radius: 4px;
+    margin-top: 8px;
+    font-size: 10px;
+}
+
+.debug-viz-stats-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 0;
+}
+
+.debug-viz-stats-row .label {
+    color: var(--debug-text-muted, #888);
+}
+
+.debug-viz-stats-row .value {
+    color: var(--debug-text, #e0e0e0);
+}
+
+/* Color-coded stat labels */
+.debug-viz-stats-row .label.visible {
+    color: var(--debug-success, #4caf50);
+}
+
+.debug-viz-stats-row .label.culled {
+    color: var(--debug-error, #f44336);
+}
+
+.debug-viz-stats-row .label.chunk {
+    color: var(--debug-accent, #4a90d9);
+}
+
+.debug-viz-stats-row .label.wasted {
+    color: var(--debug-error, #f44336);
+}
+
+/* Legend container */
+.debug-viz-legend {
+    padding: 6px 8px;
+    background: var(--debug-bg-inset);
+    border-radius: 4px;
+    margin-top: 8px;
+    font-size: 10px;
+}
+
+.debug-viz-legend-title {
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.debug-viz-legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2px;
+}
+
+.debug-viz-legend-color {
+    width: 12px;
+    height: 12px;
+    margin-right: 6px;
+    border-radius: 2px;
+}
+
+/* Button row */
+.debug-viz-button-row {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.debug-viz-button-row .debug-button {
+    flex: 1;
+}
+
+/* Size input row (W/H inputs) */
+.debug-size-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.debug-size-row label {
+    font-size: 10px;
+    color: var(--debug-text-muted, #888);
+}
+
+.debug-size-row .debug-input {
+    width: 60px;
+    text-align: center;
+}
+
+.debug-size-row .suffix {
+    font-size: 10px;
+    color: var(--debug-text-muted, #888);
+}
+
+/* Offenders list */
+.debug-offenders-list {
+    max-height: 150px;
+    overflow-y: auto;
+    font-size: 10px;
+}
+
+.debug-offender-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+    border-bottom: 1px solid var(--debug-border, #3c3c3c);
+    cursor: pointer;
+}
+
+.debug-offender-row:last-child {
+    border-bottom: none;
+}
+
+.debug-offender-row:hover {
+    background: var(--debug-bg-hover, rgba(255, 255, 255, 0.05));
+}
+
+.debug-offender-name {
+    color: var(--debug-text, #e0e0e0);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    text-transform: none;
+}
+
+.debug-offender-value {
+    color: var(--debug-error, #f44336);
+    margin-left: 8px;
+}
+
+/* Offender item (waste heatmap) */
+.debug-offender-item {
+    padding: 4px;
+    margin-bottom: 2px;
+    background: var(--debug-bg-inset);
+    border-radius: 2px;
+    cursor: pointer;
+    border-left: 3px solid var(--debug-success, #4caf50);
+}
+
+.debug-offender-item.high-waste {
+    border-left-color: var(--debug-error, #f44336);
+}
+
+.debug-offender-item:hover {
+    background: rgba(74, 144, 217, 0.2);
+}
+
+.debug-offender-item-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.debug-offender-item-header .wasted {
+    color: var(--debug-error, #f44336);
+}
+
+.debug-offender-item-details {
+    font-size: 9px;
+    color: var(--debug-text-muted, #888);
+}
+
+/* Frame count label */
+.debug-frame-count {
+    font-size: 10px;
+    color: var(--debug-text-muted, #888);
+    margin-left: 4px;
+}
+
+/* Section header (lighter style matching Resources) */
+.debug-viz-section-header {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--debug-text-muted, #888);
+    margin-bottom: 4px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Shortcuts Section
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.debug-shortcuts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.debug-shortcut-group-header {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--debug-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid var(--debug-border);
+}
+
+.debug-shortcut-group-header:first-child {
+    margin-top: 0;
+}
+
+.debug-shortcut-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 2px 0;
+}
+
+.debug-shortcut-key {
+    display: inline-block;
+    min-width: 24px;
+    padding: 2px 6px;
+    background: var(--debug-bg-inset);
+    border: 1px solid var(--debug-border-light);
+    border-radius: 3px;
+    font-family: var(--debug-font);
+    font-size: 10px;
+    text-align: center;
+    color: var(--debug-text);
+}
+
+.debug-shortcut-desc {
+    font-size: 11px;
+    color: var(--debug-text-muted);
+}

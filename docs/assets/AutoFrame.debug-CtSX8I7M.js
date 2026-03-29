@@ -1,0 +1,1 @@
+const e={id:"lab.autoFrame",type:"boolean",name:"Auto-frame components",description:"Center objects at origin and position camera to frame them",defaultValue:!0,tweakPath:"Lab.autoFrame"};export{e as options};
